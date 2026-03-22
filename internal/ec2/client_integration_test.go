@@ -33,10 +33,6 @@ func substrateEC2Client(t *testing.T, endpointURL string) *awsec2.Client {
 
 // TestRunAndDescribeInstance_Substrate tests the full RunInstance → DescribeInstance →
 // TerminateInstance lifecycle against the substrate emulator.
-//
-// It first attempts CreateLaunchTemplate (not currently supported by substrate's EC2 plugin).
-// If that fails the test proceeds by exercising RunInstance with a fake launch template ID —
-// substrate ignores unrecognised RunInstances parameters and creates the instance anyway.
 func TestRunAndDescribeInstance_Substrate(t *testing.T) {
 	ts := substrate.StartTestServer(t)
 	t.Setenv("AWS_ENDPOINT_URL", ts.URL)
@@ -45,25 +41,20 @@ func TestRunAndDescribeInstance_Substrate(t *testing.T) {
 
 	ctx := context.Background()
 
-	// Attempt CreateLaunchTemplate to discover whether substrate supports it.
+	// CreateLaunchTemplate — supported since substrate v0.44.4.
 	ec2Client := substrateEC2Client(t, ts.URL)
-	ltOut, ltErr := ec2Client.CreateLaunchTemplate(ctx, &awsec2.CreateLaunchTemplateInput{
+	ltOut, err := ec2Client.CreateLaunchTemplate(ctx, &awsec2.CreateLaunchTemplateInput{
 		LaunchTemplateName: aws.String("ood-test"),
 		LaunchTemplateData: &ec2types.RequestLaunchTemplateData{
 			ImageId:      aws.String("ami-12345678"),
 			InstanceType: ec2types.InstanceTypeT3Medium,
 		},
 	})
-
-	var launchTemplateID string
-	if ltErr != nil {
-		t.Logf("CreateLaunchTemplate not supported by substrate (%v) — using fake launch template ID", ltErr)
-		// Use a syntactically valid fake ID; substrate ignores unknown RunInstances params.
-		launchTemplateID = "lt-00000000000000000"
-	} else {
-		launchTemplateID = aws.ToString(ltOut.LaunchTemplate.LaunchTemplateId)
-		t.Logf("CreateLaunchTemplate succeeded: launchTemplateID=%s", launchTemplateID)
+	if err != nil {
+		t.Fatalf("CreateLaunchTemplate: %v", err)
 	}
+	launchTemplateID := aws.ToString(ltOut.LaunchTemplate.LaunchTemplateId)
+	t.Logf("launch template: %s", launchTemplateID)
 
 	// Build the adapter client (picks up AWS_ENDPOINT_URL from the environment).
 	client, err := New(ctx, "us-east-1")
