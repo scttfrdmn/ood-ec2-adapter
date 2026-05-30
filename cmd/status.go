@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"os"
 
+	awstypes "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/scttfrdmn/ood-ec2-adapter/internal/ec2"
 	"github.com/scttfrdmn/ood-ec2-adapter/internal/ood"
-	awstypes "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/spf13/cobra"
 )
 
