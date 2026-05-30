@@ -1,5 +1,11 @@
 # ood-ec2-adapter
 
+[![CI](https://github.com/scttfrdmn/ood-ec2-adapter/actions/workflows/ci.yml/badge.svg)](https://github.com/scttfrdmn/ood-ec2-adapter/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/scttfrdmn/ood-ec2-adapter)](https://goreportcard.com/report/github.com/scttfrdmn/ood-ec2-adapter)
+[![codecov](https://codecov.io/gh/scttfrdmn/ood-ec2-adapter/branch/main/graph/badge.svg)](https://codecov.io/gh/scttfrdmn/ood-ec2-adapter)
+[![Go Reference](https://pkg.go.dev/badge/github.com/scttfrdmn/ood-ec2-adapter.svg)](https://pkg.go.dev/github.com/scttfrdmn/ood-ec2-adapter)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 OOD compute adapter for single-node EC2 jobs. Translates Open OnDemand job submissions to EC2 instance launches using a Launch Template.
 
 ## Commands
