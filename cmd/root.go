@@ -9,7 +9,10 @@ var (
 	launchTemplate string
 )
 
+var version = "dev" // overridden at release time via -ldflags -X .../cmd.version
+
 var rootCmd = &cobra.Command{
+	Version: version,
 	Use:   "ood-ec2-adapter",
 	Short: "OOD compute adapter for EC2 single-node jobs",
 	Long:  "Translates Open OnDemand job submissions to EC2 instance launches.",
