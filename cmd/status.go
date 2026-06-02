@@ -17,7 +17,7 @@ var statusCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := context.Background()
-		client, err := ec2.New(ctx, region)
+		client, err := ec2.New(ctx, region, awsOptions(ctx)...)
 		if err != nil {
 			return err
 		}
